@@ -1,21 +1,30 @@
 import json
+import datetime
 
-class Server_Config:
+class Server_Meta_Data:
     pwd: str
-    def __init__(self, pwd:str="默认密码"):
+    sync_time: datetime.datetime
+    def __init__(self, pwd:str="默认密码", sync_time:str="无时间"):
         self.pwd = pwd
+        try:
+            self.sync_time = datetime.datetime.strptime(sync_time, "%Y-%m-%d %H:%M:%S")
+        except ValueError as e:
+            print(f"时间解析失败: {e}")
+            self.sync_time = datetime.datetime.now()
 
     @classmethod
     def from_dict(cls, data:dict):
         """从字典创建实例"""
         return cls(
             pwd=data.get("pwd", "默认密码"),
+            sync_time=data.get("sync_time", "无时间")
         )
 
     def to_dict(self):
         """转换为字典"""
         return {
             "pwd": self.pwd,
+            "sync_time": self.sync_time.strftime("%Y-%m-%d %H:%M:%S")
         }
 
 class Server_Todo_Entry_Data:
@@ -110,7 +119,7 @@ def load_todo_data(file_path:str) -> Server_Todo_Data:
         print(f"读取文件时出错: {e}")
     return Server_Todo_Data()
 
-def save_config(file_path:str, data:Server_Config):
+def save_meta_data(file_path:str, data:Server_Meta_Data):
     try:
         with open(file_path, 'w', encoding='utf-8') as file:
             json.dump(data.to_dict(), file, ensure_ascii=False, indent=2)
@@ -118,16 +127,16 @@ def save_config(file_path:str, data:Server_Config):
     except Exception as e:
         print(f"保存文件时出错: {e}")
 
-def load_config(file_path:str) -> Server_Config:
+def load_meta_data(file_path:str) -> Server_Meta_Data:
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             json_data = json.load(file)
         print("读取成功:", json_data)
-        return Server_Config.from_dict(json_data)
+        return Server_Meta_Data.from_dict(json_data)
     except FileNotFoundError:
         print("文件不存在")
     except json.JSONDecodeError:
         print("JSON格式错误")
     except Exception as e:
         print(f"读取文件时出错: {e}")
-    return Server_Config()
+    return Server_Meta_Data()
