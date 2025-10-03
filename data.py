@@ -4,27 +4,35 @@ import datetime
 class Server_Meta_Data:
     pwd: str
     sync_time: datetime.datetime
-    def __init__(self, pwd:str="默认密码", sync_time:str="无时间"):
+    http_port: int
+    hello_port: int
+    def __init__(self, pwd:str="默认密码", sync_time:str="无时间", http_port:int=5000, hello_port:int=5001):
         self.pwd = pwd
         try:
             self.sync_time = datetime.datetime.strptime(sync_time, "%Y-%m-%d %H:%M:%S")
         except ValueError as e:
             print(f"时间解析失败: {e}")
             self.sync_time = datetime.datetime.now()
+        self.http_port = http_port
+        self.hello_port = hello_port
 
     @classmethod
     def from_dict(cls, data:dict):
         """从字典创建实例"""
         return cls(
             pwd=data.get("pwd", "默认密码"),
-            sync_time=data.get("sync_time", "无时间")
+            sync_time=data.get("sync_time", "无时间"),
+            http_port=data.get("http_port", 5000),
+            hello_port=data.get("hello_port", 5001),
         )
 
     def to_dict(self):
         """转换为字典"""
         return {
             "pwd": self.pwd,
-            "sync_time": self.sync_time.strftime("%Y-%m-%d %H:%M:%S")
+            "sync_time": self.sync_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "http_port": self.http_port,
+            "tcp_port": self.tcp_port,
         }
 
 class Server_Todo_Entry_Data:
