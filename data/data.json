@@ -1,5 +1,6 @@
 {
-  "todo_tab_list": [
+  "sync_time": "2025-10-01 00:00:00",
+  "tab_list": [
     {
       "name": "ASPLOS",
       "todo_entry_list": [
@@ -79,7 +80,7 @@
       "todo_entry_list": [
         {
           "name": "最终提交",
-          "ddl": "10-30 00:01"
+          "ddl": "2025-10-30 00:09"
         }
       ]
     }
