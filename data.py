@@ -102,8 +102,9 @@ class Server_Todo_Data:
         )
 
     def get_sync_time(self):
-        return self.sync_time.strftime("%Y-%m-%d %H:%M:%S"),
+        return self.sync_time.strftime("%Y-%m-%d %H:%M:%S")
     def update_sync_time(self):
+        print("更新时间")
         self.sync_time = datetime.datetime.now()
         self.save("./data/data.json")
         return self.get_sync_time()
@@ -111,6 +112,7 @@ class Server_Todo_Data:
     def get_tab_list(self):
         return [tab.to_dict() for tab in self.todo_tab_list]
     def update_tab_list(self, new_tab_list:list[dict]):
+        print("更新列表")
         self.todo_tab_list = [Server_Todo_Tab_Data.from_dict(tab_data) for tab_data in new_tab_list]
         self.update_sync_time()
 
@@ -122,6 +124,7 @@ class Server_Todo_Data:
         }
 
     def save(self, file_path:str):
+        print("保存数据")
         try:
             with open(file_path, 'w', encoding='utf-8') as file:
                 json.dump(self.to_dict(), file, ensure_ascii=False, indent=2)
@@ -129,15 +132,8 @@ class Server_Todo_Data:
         except Exception as e:
             print(f"保存文件时出错: {e}")
 
-def save_todo_data(file_path:str, data:Server_Todo_Data):
-    try:
-        with open(file_path, 'w', encoding='utf-8') as file:
-            json.dump(data.to_dict(), file, ensure_ascii=False, indent=2)
-        print(f"数据已保存到 {file_path}")
-    except Exception as e:
-        print(f"保存文件时出错: {e}")
-
 def load_todo_data(file_path:str) -> Server_Todo_Data:
+    print("加载数据")
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             json_data = json.load(file)
@@ -152,6 +148,7 @@ def load_todo_data(file_path:str) -> Server_Todo_Data:
     return Server_Todo_Data()
 
 def load_meta_data(file_path:str) -> Server_Meta_Data:
+    print("加载元数据")
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             json_data = json.load(file)

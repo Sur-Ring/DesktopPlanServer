@@ -17,13 +17,18 @@ app = Flask(__name__)
 
 @app.route('/api/data/pull', methods=['GET'])
 def pull_data():
+    print("收到拉取数据")
     return jsonify(sync.pull_data())
 
-@app.route('/api/data/push', methods=['PUT'])
+@app.route('/api/data/push', methods=['POST'])
 def push_data():
+    print("收到同步数据")
     data = request.get_json()
-    print(f"Received push data: {data}")  # 在实际应用中，这里可以处理数据
-    return jsonify(sync.push_data(data))
+    print(f"收到数据: {data}")  # 在实际应用中，这里可以处理数据
+    res = sync.push_data(data)
+    # 怎么广播到其他在线客户端?
+    print(f"返回数据: {res}")
+    return jsonify(res)
 
 @app.route('/api/toast', methods=['GET'])
 def send_toast():
