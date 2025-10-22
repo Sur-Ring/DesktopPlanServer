@@ -36,7 +36,7 @@ def send_toast():
 
 def sync_time_stream():
     while True:
-        yield sync.get_todo_data().get_sync_time()
+        yield "data: "+sync.get_todo_data().get_sync_time()+"\n\n"
         time.sleep(1)
 
 @app.route('/sync_time', methods=['GET'])
